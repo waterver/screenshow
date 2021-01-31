@@ -13,8 +13,8 @@ class VIDEOPLAYER(QMainWindow):
         super().__init__()
         self.setWindowTitle("Media")
         self.setWindowOpacity(0.95)
-        screen = QDesktopWidget().screenGeometry()
-        self.resize(screen.width(), screen.height())
+        # screen = QDesktopWidget().screenGeometry()
+        # self.resize(screen.width(), screen.height())
 
         self.default_suffix = ['.mp4', '.flv', '.avi']
         self.default_list(dir)
@@ -30,20 +30,23 @@ class VIDEOPLAYER(QMainWindow):
 
     # def change_list()
     def initUI(self):
-        self.player = QMediaPlayer(self)
-        self.widget = QVideoWidget(self)
+        self.player = QMediaPlayer()
+        self.widget = QVideoWidget()
+        self.widget.showFullScreen()
         self.player.setVideoOutput(self.widget)
         if self.list != None:
             self.playlist = QMediaPlaylist(self)
             self.playlist.setPlaybackMode(self.playlist.Loop)  # 列表循环播放模式
             for i in self.list:
-                self.playlist.addMedia(QMediaContent(QUrl("%s"%i)))
+                self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(r'%s'%i)))
             # self.player.setMedia(QMediaContent(QUrl.fromLocalFile()))
         self.player.setPlaylist(self.playlist)
-
-        self.widget.showFullScreen()
         self.player.play()
 
+    def __del__(self):
+        self.player.stop()
+        self.widget.close()
+        print("over")
     # def
 # class CONTROL(QWidget):
 
@@ -51,4 +54,8 @@ class VIDEOPLAYER(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     player = VIDEOPLAYER("E:/2020大三/工训/pyqt5/video")
+    while True:
+        if(input("exit with q：")=='q'):
+            del player
+            break
     app.exec_()
