@@ -1,5 +1,7 @@
-# test1
+# pyqt5视频播放
 
-1. 测试git_vscode
-2. 写入pyqt5视频播放
-3. 测试commit
+## video.py
+
+1. 获取本地的视频
+2. pyqt5视频播放
+3. 常用的播放方式
