@@ -37,5 +37,5 @@ class MOTOR():
         self.num=num
 
 if __name__=="__main__":
-    stepmoter=MOTOR(0,)
-    stepmoter.
+    stepmoter=MOTOR(0,40,38)
+    stepmoter.change(2)
