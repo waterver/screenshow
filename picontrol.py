@@ -18,6 +18,9 @@ class MOTOR():
 
     def change(self,num):
         t=self.num-num
+        if t==0:
+            return
+        
         if t>0 and t<= 2:
             GPIO.output(self.dirm,1)
         elif t<0 and t>=-2:
@@ -26,7 +29,7 @@ class MOTOR():
         elif t==3:
             GPIO.output(self.dirm,0)
             t-=2
-        else:
+        elif t==-3:
             GPIO.output(self.dirm,1)
             t+=2
             
