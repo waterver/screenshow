@@ -1,5 +1,6 @@
 import cv2 as cv
-from tensorflow import lite
+from tensorflow.lite import Interpreter
+# from tflite_runtime.interpreter import Interpreter
 import numpy as np
 import time
 
@@ -14,13 +15,13 @@ class DETECT_WITH_CV():
         self.camera.set(4,750)
         self.camera.set(5,25)
         self.success,self.background=self.camera.read()
-        # time2=time.time()
+        #
         # print(time2-time1)
         # self.mask=bs.apply(self.background)
         # self.th = cv2.threshold(self.mask.copy(), 244, 255, cv.THRESH_BINARY)[1]
         # 加载模型
         self.model=model
-        self.interpreter=lite.Interpreter(model_path=self.model)
+        self.interpreter=Interpreter(model_path=self.model)
         self.interpreter.allocate_tensors()
         self.input=self.interpreter.get_input_details()
         print(str(self.input))
@@ -32,13 +33,12 @@ class DETECT_WITH_CV():
         while self.camera.isOpened():
             self.success,self.frame=self.camera.read()
             #中值去噪
-            self.frame=cv.medianBlur(self.frame,2)
+            self.frame=cv.medianBlur(self.frame,1)
             # self.frame=cv.fastNlMeansDenoisingColored(self.frame,None,5,5,7,21)
             cv.imshow("test1",self.frame)
             if cv.waitKey(25)==ord('q'):
                 self.camera.release()
 
-        
     def get_and_return(self):
         #获取镜像的两张照片提高准确度
         #树莓派目前版本的opencv无法连续读取图像，尝试解决中
@@ -51,7 +51,7 @@ class DETECT_WITH_CV():
         # self.frame=cv.fastNlMeansDenoisingColored(self.frame,None,10,10,7,21)
         self.frame1=cv.cvtColor(self.frame,cv.COLOR_BGR2RGB)
         self.frame1=cv.resize(self.frame1,(224,224))
-        self.frame=cv.medianBlur(self.frame,2)
+        self.frame=cv.medianBlur(self.frame,1)
         self.frame2=cv.flip(self.frame1,0)
         
         self.img1=np.array(self.frame1).astype('float32')
