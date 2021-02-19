@@ -2,6 +2,7 @@ from RPi import GPIO
 import time
 
 class MOTOR():
+    #步进电机的控制
     def __init__(self,num=0,dirm=None,pwm=None,freq=1000,multifre=16):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
@@ -55,6 +56,7 @@ class MOTOR():
         self.num=num
 
 class STEER():
+    # 舵机控制
     def __init__(self,pwmchannel=None,angle=None):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
@@ -75,6 +77,22 @@ class STEER():
             duty = 10 / 180 * angle + 2
             self.pwm.ChangeDutyCycle(duty)
     
+
+class LED_LITE():
+    #led亮度控制
+    def __init__(self,pwmchannel,fre):
+        self.pwm=pwmchannel
+        GPIO.setup(pwmchannel,GPIO.OUT)
+        self.pwm=GPIO.PWM(self.pwm,fre)
+        self.pwm.start(0)
+
+    def change(self,pwm):
+        self.pwm.ChangeDutyCycle(pwm)
+    
+    def __del__(self):
+        self.pwm.stop()
+        GPIO.output(self.pwm,0)
+
 
 if __name__=="__main__":
     stepmoter=MOTOR(0,40,38)

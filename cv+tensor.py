@@ -11,8 +11,9 @@ class DETECT_WITH_CV():
         # self.bs = cv2.createBackgroundSubtractorKNN(detectShadows=True)
         # time1=time.time()
         self.camera=cv.VideoCapture(0)
-        self.camera.set(3,1000)
-        self.camera.set(4,1000)
+        self.camera.set(3,640)
+        self.camera.set(4,640)
+        #pi csi摄像头所需设定
         self.camera.set(38,1)
         self.success,self.background=self.camera.read()
 
