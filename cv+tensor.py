@@ -3,7 +3,7 @@ from tensorflow.lite import Interpreter
 # from tflite_runtime.interpreter import Interpreter
 import numpy as np
 import time
-
+from threading import Timer
 
 class DETECT_WITH_CV():
     def __init__(self,model=None):
@@ -12,9 +12,11 @@ class DETECT_WITH_CV():
         # time1=time.time()
         self.camera=cv.VideoCapture(0)
         self.camera.set(3,1000)
-        self.camera.set(4,750)
-        self.camera.set(5,25)
+        self.camera.set(4,1000)
+        self.camera.set(38,1)
         self.success,self.background=self.camera.read()
+
+        # self.pass_fraps()
         #
         # print(time2-time1)
         # self.mask=bs.apply(self.background)
@@ -26,7 +28,15 @@ class DETECT_WITH_CV():
         self.input=self.interpreter.get_input_details()
         print(str(self.input))
         print(str(self.interpreter.get_output_details()))
+        
 
+    # def threadtime(self): #启用清空函数
+    #     self.threadtime1=Timer(1/25,self.pass_fraps)
+    #     self.threadtime1.start()
+
+    # def pass_fraps(self):
+    #     self.threadtime()
+    #     self.camera.grab()
 
     def test_cv(self):
         
@@ -37,7 +47,7 @@ class DETECT_WITH_CV():
             # self.frame=cv.fastNlMeansDenoisingColored(self.frame,None,5,5,7,21)
             cv.imshow("test1",self.frame)
             if cv.waitKey(25)==ord('q'):
-                self.camera.release()
+                # self.camera.release()
 
     def get_and_return(self):
         #获取镜像的两张照片提高准确度
@@ -46,11 +56,11 @@ class DETECT_WITH_CV():
         # self.camera=cv.VideoCapture(0)
         # self.success=self.camera.grab()
         # self.success,self.frame=self.camera.retrieve()
-
-        self.success,self.frame=self.camera.read()
+        [cap.grab() for i in range(2)]
+        self.success,self.frame=self.camera.read() 
         # self.frame=cv.fastNlMeansDenoisingColored(self.frame,None,10,10,7,21)
-        self.frame1=cv.cvtColor(self.frame,cv.COLOR_BGR2RGB)
         self.frame1=cv.resize(self.frame1,(224,224))
+        self.frame1=cv.cvtColor(self.frame,cv.COLOR_BGR2RGB)
         self.frame=cv.medianBlur(self.frame,1)
         self.frame2=cv.flip(self.frame1,0)
         
